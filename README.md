@@ -1,5 +1,9 @@
 # 枝间 · Thinking Canvas
 
+[![Validate](https://github.com/Beatatata/zhijian-thinking-canvas/actions/workflows/ci.yml/badge.svg)](https://github.com/Beatatata/zhijian-thinking-canvas/actions/workflows/ci.yml)
+![version](https://img.shields.io/badge/version-1.0.0-blue)
+![license](https://img.shields.io/badge/license-MIT-green)
+
 一个帮助你拆解问题、整理资料、理清关系并推进下一步的个人思考画布。内容保存在浏览器本地，不需要账户或后端数据库即可自行运行。
 
 仓库：<https://github.com/Beatatata/zhijian-thinking-canvas>（MIT · 制作人 [TATALAB](https://www.tatalab.ai/)）。仓库只有应用源码，不含任何个人工作台数据。
@@ -98,6 +102,6 @@ GitHub Pages 的项目站点位于仓库子路径，部署时要设置 Vite 的 
 - [GitHub 发布清单](docs/GITHUB_RELEASE.md)与[发布 agent 提示词](docs/GITHUB_PUBLISH_PROMPT.md)
 - [安全与隐私](SECURITY.md)、[社区准则](CODE_OF_CONDUCT.md)、[更新记录](CHANGELOG.md)
 
-截图、发布地址、CI 与版本徽章只在实际生成或验证后加入，不使用虚构的仓库与演示链接。
+截图与演示地址只在实际生成或验证后加入，不使用虚构的仓库与演示链接。上方版本与许可证徽章对应 `package.json` 的 `1.0.0` 与仓库内的 MIT `LICENSE`。
 
-[`.github/workflows/ci.yml`](https://github.com/Beatatata/zhijian-thinking-canvas/blob/main/.github/workflows/ci.yml) 在推送与 PR 时运行 `npm ci`、`npm test`、`npm run build`；当前主版本为 `actions/checkout@v7` 与 `actions/setup-node@v7`，按 [checkout](https://github.com/actions/checkout) 与 [setup-node](https://github.com/actions/setup-node) 官方说明配置。
+[`.github/workflows/ci.yml`](https://github.com/Beatatata/zhijian-thinking-canvas/blob/main/.github/workflows/ci.yml) 在推送与 PR 时运行 `npm ci`、`npm test`、`npm run build`；当前主版本为 `actions/checkout@v7` 与 `actions/setup-node@v7`，按 [checkout](https://github.com/actions/checkout) 与 [setup-node](https://github.com/actions/setup-node) 官方说明配置。首次运行（2026-10-08，`test-and-build`）已通过，见 [运行记录](https://github.com/Beatatata/zhijian-thinking-canvas/actions/runs/37731170592)。
