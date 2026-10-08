@@ -1,0 +1,11 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {snapRect} from './snapping';import {inkFor} from './appearance';
+test('靠近边缘时吸附，远离时保持自由坐标',()=>{const other={x:100,y:200,w:80,h:80};const near=snapRect({x:103,y:202,w:80,h:80},[other],6);assert.equal(near.dx,-3);assert.equal(near.dy,-2);assert.equal(near.gx,100);const far=snapRect({x:321,y:451,w:80,h:80},[other],6);assert.equal(far.dx,0);assert.equal(far.gx,undefined);});
+test('文字根据背景明暗选择可读颜色',()=>{assert.equal(inkFor('#315779'),'#ffffff');assert.equal(inkFor('#fff0f3'),'#344054');});
+test('辅助线只跨越参与对齐的卡片，不贯穿整个画布',()=>{const r=snapRect({x:102,y:30,w:80,h:80},[{x:100,y:200,w:80,h:80}],6);assert.equal(r.gx,100);assert.equal(r.yStart,18);assert.equal(r.yEnd,292);});
+test('靠近中线与边缘之间不产生错误吸附',()=>{const r=snapRect({x:50,y:400,w:20,h:20},[{x:0,y:0,w:100,h:100}],3);assert.equal(r.gx,undefined);});
+test('opposite edges do not stick cards together',()=>{const r=snapRect({x:100,y:300,w:80,h:80},[{x:20,y:20,w:80,h:80}],6);assert.equal(r.gx,undefined);});
+test('nearest alignment wins regardless of previous guide',()=>{const r=snapRect({x:102,y:300,w:80,h:80},[{x:100,y:20,w:80,h:80},{x:108,y:20,w:80,h:80}],6,{gx:108});assert.equal(r.gx,100);});
+import {visualRect} from './snapping';
+import {intersects} from './snapping';
+test('框选按可见图标范围相交判定，不选中只触及标题外框的画板',()=>{const symbol=visualRect({x:100,y:200,w:160,h:130},'board');assert.equal(intersects(symbol,{x:145,y:202,w:10,h:10}),true);assert.equal(intersects(symbol,{x:100,y:280,w:160,h:30}),false);assert.equal(intersects(symbol,{x:149,y:206,w:0,h:0}),false);});
+test('board alignment uses visible symbol instead of invisible title box',()=>{assert.deepEqual(visualRect({x:100,y:200,w:160,h:130},'board'),{x:149,y:206,w:62,h:62});});

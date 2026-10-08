@@ -1,0 +1,15 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {seed,copy} from './model';
+import {workspaceFiles,markdown} from './export';
+import {writeMirror,type SyncDirectory} from './mirror';
+class MemoryDirectory implements SyncDirectory {
+ name='验收';files=new Map<string,Blob>();writes=0;
+ async queryPermission(){return 'granted';}async requestPermission(){return 'granted';}
+ async getDirectoryHandle(name:string):Promise<SyncDirectory>{const parent=this;return {name,getDirectoryHandle:async(n:string)=>parent.getDirectoryHandle(name+'/'+n),getFileHandle:async(n:string,options?:{create:boolean})=>parent.getFileHandle(name+'/'+n,options),queryPermission:()=>parent.queryPermission(),requestPermission:()=>parent.requestPermission()};}
+ async getFileHandle(name:string,options?:{create:boolean}){const parent=this;if(!options?.create&&!this.files.has(name))throw Object.assign(new Error('missing'),{name:'NotFoundError'});return {getFile:async()=>parent.files.get(name)!,createWritable:async()=>{let value:Blob;return {write:async(data:Blob|string|Uint8Array)=>{value=data instanceof Blob?data:new Blob([data as BlobPart]);},close:async()=>{parent.files.set(name,value);parent.writes++;}};}};}
+}
+test('同步使用稳定文件名，画板改名后内部链接保持有效',()=>{const p=seed(),first=workspaceFiles(p,p.rootId,true),board=Object.values(p.boards).find(b=>b.parentId===p.rootId)!;p.boards[board.id].title='已改名';const next=workspaceFiles(p,p.rootId,true);assert.deepEqual([...first.keys()],[...next.keys()]);assert.ok(String(next.get('boards/board-'+board.id+'.md')).includes('# 已改名'));assert.ok(String(next.get('README.md')).includes('boards/board-'+p.rootId+'.md'));assert.match(markdown(p,p.rootId,undefined,id=>'board-'+id+'.md'),/\]\(board-/);});
+test('文件夹镜像可增量写入，外部修改时预检阻止覆盖',async()=>{const p=seed(),dir=new MemoryDirectory();await writeMirror(dir,p);const note=Object.values(p.cards).find(n=>n.kind==='note')!;const next=copy(p);next.cards[note.id].body='第二版内容';await writeMirror(dir,next);assert.match(await dir.files.get('boards/board-'+p.rootId+'.md')!.text(),/第二版内容/);const path='boards/board-'+p.rootId+'.md';dir.files.set(path,new Blob(['Obsidian 手动补充']));const writes=dir.writes;const changed=copy(next);changed.cards[note.id].body='第三版';await assert.rejects(writeMirror(dir,changed),/外部修改/);assert.equal(dir.writes,writes);assert.equal(await dir.files.get(path)!.text(),'Obsidian 手动补充');assert.ok(dir.files.has('完整备份.json'));assert.ok(dir.files.has('思路文档.html'));});
+test('同步不覆盖同名未知文件，删除内容保留旧文件',async()=>{const p=seed(),dir=new MemoryDirectory();dir.files.set('README.md',new Blob(['已有说明']));await assert.rejects(writeMirror(dir,p),/外部修改/);assert.equal(dir.writes,0);const clean=new MemoryDirectory();await writeMirror(clean,p);const table=Object.values(p.cards).find(n=>n.table)!;delete p.cards[table.id];await writeMirror(clean,p);assert.ok(clean.files.has('tables/table-'+table.id+'.csv'));});
+test('思路文档的待办、目标与关系可跳回正文，原始文本仍转义',()=>{const p=seed(),html=String(workspaceFiles(p,p.rootId,true).get('思路文档.html'));assert.match(html,/href="#card-/);assert.match(html,/id="card-/);assert.match(html,/返回目录/);});
