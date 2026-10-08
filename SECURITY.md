@@ -10,7 +10,7 @@
 
 ## 报告问题
 
-不要在公开 issue 中提交个人备份、真实笔记、图片、令牌或知识库文件。如涉及可利用漏洞，优先使用仓库启用的 GitHub 私密漏洞报告；若未启用，通过 [TATALAB 官网](https://www.tatalab.ai/)提供的联系渠道联系制作人。当前没有设定公开安全邮箱或响应时限。
+不要在公开 issue 中提交个人备份、真实笔记、图片、令牌或知识库文件。如涉及可利用漏洞，请使用仓库已启用的 [GitHub 私密漏洞报告](https://github.com/Beatatata/zhijian-thinking-canvas/security/advisories/new)；也可以先通过 [TATALAB 官网](https://www.tatalab.ai/) 提供的联系渠道联系制作人。当前没有设定公开安全邮箱或响应时限。
 
 报告应提供版本、复现步骤、影响和使用合成数据的最小示例。1.0.0 是当前维护基线；历史预发布版本不承诺单独修复。
 

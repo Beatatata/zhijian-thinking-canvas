@@ -18,7 +18,7 @@
 贡献者：克隆仓库，`npm ci`、`npm run dev`；`npm test`、`npm run build` 验证。
 普通用户：访问单独发布的演示网页，无需安装。备份迁移：原地址下载完整 JSON，在新地址导入恢复。
 
-GitHub Pages、其他静态托管或自己的服务器均可承载 dist。GitHub 项目站点通常有仓库子路径，需要核对 Vite base；无前端路由的当前实现也可构建相对资源路径 `npm run build -- --base=./`。Pages workflow 的权限、环境和 action 版本以当时官方文档为准，本仓库暂未配置或启用该服务。
+GitHub Pages、其他静态托管或自己的服务器均可承载 dist。GitHub 项目站点通常有仓库子路径，需要核对 Vite base；无前端路由的当前实现也可构建相对资源路径 `npm run build -- --base=./`。本仓库已启用 Pages（`build_type: workflow`），由 `.github/workflows/pages.yml` 在推送到 `main` 时构建与发布，站点地址是 <https://beatatata.github.io/zhijian-thinking-canvas/>；新建其他站点时应重新核对 Pages workflow 的权限、环境和 action 版本。
 
 ## 发布后
 

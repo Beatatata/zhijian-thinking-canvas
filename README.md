@@ -8,6 +8,8 @@
 
 仓库：<https://github.com/Beatatata/zhijian-thinking-canvas>（MIT · 制作人 [TATALAB](https://www.tatalab.ai/)）。仓库只有应用源码，不含任何个人工作台数据。
 
+在线使用（无需安装）：<https://beatatata.github.io/zhijian-thinking-canvas/>。这是通用教学示例站点，你的内容只保存在你自己的浏览器里。
+
 ## 能做什么
 
 - 笔记：外层只显示格式化正文与可跳转链接，双击进入专注编辑修改正文。专注编辑支持标题、粗体、列表、引用、代码和 Markdown 粘贴，内容仍保存与导出为 Markdown。
@@ -72,9 +74,9 @@ npm run preview
 
 仓库：<https://github.com/Beatatata/zhijian-thinking-canvas>。公开仓库只包含应用源码；个人工作台、图片、回收站及文件夹授权保存在浏览器 IndexedDB，不在仓库中；源码内的 `seed()` 只有通用教学示例。向仓库提交内容时，不要加入验收截图、完整备份 JSON、导出 ZIP 或 Obsidian 镜像目录，也不要把 `.openai/` 发布绑定或 `.sites-runtime/` 一起提交。
 
-其他人有两种使用方式：克隆或下载仓库后按本地运行说明执行 `npm ci`、`npm run dev`；或者打开单独部署的公开静态网站，无需安装。`npm run build` 生成 dist，可部署到任意静态托管服务。
+其他人有两种使用方式：直接打开 <https://beatatata.github.io/zhijian-thinking-canvas/> 在线使用，无需安装；或者克隆或下载仓库后按本地运行说明执行 `npm ci`、`npm run dev`。`npm run build` 生成 dist，也可部署到任意静态托管服务。
 
-GitHub Pages 的项目站点位于仓库子路径，部署时要设置 Vite 的 base，例如 `npm run build -- --base=/zhijian-thinking-canvas/`；无前端路由的当前实现也可以构建相对资源路径 `npm run build -- --base=./`。不要直接复用根路径构建。**本仓库当前未启用 Pages，也没有在线演示地址**；以后如启用，只使用通用教学数据。
+在线演示由 GitHub Pages 托管：`.github/workflows/pages.yml` 在推送到 `main` 与手动触发时先跑 `npm test`、再构建并发布，站点只使用源码内 `seed()` 的通用教学示例，访问者输入的内容仍保存在各自浏览器的 IndexedDB。GitHub Pages 的项目站点位于仓库子路径，部署时必须设置 Vite 的 base：workflow 用 `actions/configure-pages` 输出的 `base_path`（当前为 `/zhijian-thinking-canvas/`）构建；手动部署时用 `npm run build -- --base=/zhijian-thinking-canvas/`，无前端路由的当前实现也可用 `npm run build -- --base=./`。不要直接复用根路径构建。
 
 仓库公开不会自动让原制作人的私有 Sites 地址公开。每个人都会获得教学示例与自己的本地数据，不会看到作者的个人工作台。跨域名、浏览器、设备迁移时，先下载完整备份，再到目标站点恢复；Markdown 不是布局恢复文件。
 
@@ -102,6 +104,8 @@ GitHub Pages 的项目站点位于仓库子路径，部署时要设置 Vite 的 
 - [GitHub 发布清单](docs/GITHUB_RELEASE.md)与[发布 agent 提示词](docs/GITHUB_PUBLISH_PROMPT.md)
 - [安全与隐私](SECURITY.md)、[社区准则](CODE_OF_CONDUCT.md)、[更新记录](CHANGELOG.md)
 
-截图与演示地址只在实际生成或验证后加入，不使用虚构的仓库与演示链接。上方版本与许可证徽章对应 `package.json` 的 `1.0.0` 与仓库内的 MIT `LICENSE`。
+仓库链接、在线演示地址与徽章均在实际可访问、验证通过后写入，不使用虚构的仓库与演示链接。演示地址：<https://beatatata.github.io/zhijian-thinking-canvas/>。上方版本与许可证徽章对应 `package.json` 的 `1.0.0` 与仓库内的 MIT `LICENSE`。
 
 [`.github/workflows/ci.yml`](https://github.com/Beatatata/zhijian-thinking-canvas/blob/main/.github/workflows/ci.yml) 在推送与 PR 时运行 `npm ci`、`npm test`、`npm run build`；当前主版本为 `actions/checkout@v7` 与 `actions/setup-node@v7`，按 [checkout](https://github.com/actions/checkout) 与 [setup-node](https://github.com/actions/setup-node) 官方说明配置。首次运行（2026-10-08，`test-and-build`）已通过，见 [运行记录](https://github.com/Beatatata/zhijian-thinking-canvas/actions/runs/37731170592)。
+
+[`.github/workflows/pages.yml`](https://github.com/Beatatata/zhijian-thinking-canvas/blob/main/.github/workflows/pages.yml) 负责构建并发布 GitHub Pages 站点，使用 `actions/configure-pages@v6`、`actions/upload-pages-artifact@v5`、`actions/deploy-pages@v5`（均为当前主版本），权限仅 `contents: read` 加上发布所需 `pages: write` 与 `id-token: write`。
